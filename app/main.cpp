@@ -117,7 +117,6 @@ void test_SGD() {
     std::vector<Value> initial_params = model.parameters();
     std::cout << "Total parameters: " << initial_params.size() << std::endl;
     
-
     // Input
     Value x1(tape.create_leaf(1.0f), &tape);
     Value x2(tape.create_leaf(2.0f), &tape);
@@ -127,7 +126,7 @@ void test_SGD() {
     Value target(tape.create_leaf(3.5f), &tape);
 
     // Loop
-    for (size_t i = 0; i < 10; i++) {
+    for (size_t i = 0; i < 30; i++) {
         std::cout << "\n=== Iteration " << i << " ===" << std::endl;
         
         // Forward
@@ -146,8 +145,10 @@ void test_SGD() {
 
         // Update
         optimizer.step();
+
+        // Clear only computation graph (keeps inputs/targets/parameters valid)
+        tape.clear_computation_graph();
     }
-    
 }
 
 int main() {
@@ -155,6 +156,7 @@ int main() {
     test_linear();
     test_MLP();
     test_SGD();
+
     return 0;
 }
 

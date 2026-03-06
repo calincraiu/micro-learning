@@ -5,10 +5,13 @@
 
 #include "core/Value.h"
 
-class SGD {
+#include "nn/optimizers/Optimizer.h"
+
+class SGD : public Optimizer {
 public:
 	SGD(std::vector<Value> params, float lr);
-	void step();
+
+	void step() override;
 
 private:
 	float m_lr; // learning_rate

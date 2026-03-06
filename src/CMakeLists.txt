@@ -25,6 +25,7 @@ set(NN_HEADERS
 
     "${CMAKE_SOURCE_DIR}/include/nn/models/MLP.h"
 
+    "${CMAKE_SOURCE_DIR}/include/nn/optimizers/Optimizer.h"
     "${CMAKE_SOURCE_DIR}/include/nn/optimizers/SGD.h"
 )
 set(NN_SOURCES

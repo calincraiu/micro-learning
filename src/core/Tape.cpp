@@ -112,7 +112,7 @@ void Tape::backward(Node* node) {
     if (!node) return;
 
     // Set the root gradient
-    node->set_grad(1.0f);
+    node->set_grad(node->get_grad() + 1.0f);
 
     // Process nodes in reverse order (reverse topological = correct for backprop)
     for (auto it = m_nodes.rbegin(); it != m_nodes.rend(); ++it) {
@@ -232,4 +232,16 @@ void Tape::zero_grad() {
 
 void Tape::clear() {
 	m_nodes.clear();
+}
+
+void Tape::clear_computation_graph() {
+    auto it = m_nodes.begin();
+    while (it != m_nodes.begin()) {
+        if ((*it)->get_op() == Op::Leaf) {
+            ++it;  // Keep leaf nodes
+        }
+        else {
+            it = m_nodes.erase(it); // Remove computation nodes
+        }
+    }
 }

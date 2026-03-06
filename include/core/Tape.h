@@ -13,7 +13,14 @@ public:
 
 	void backward(Node* node);
 	void zero_grad();
+	/// <summary>
+	/// Clear all nodes from the tape.
+	/// </summary>
 	void clear();
+	/// <summary>
+	/// Clear all non-leaf nodes from the tape.
+	/// </summary>
+	void clear_computation_graph();
 
 private:
 	void _set_op_result(Node* node);
