@@ -1,4 +1,6 @@
 #include <iostream>
+#include <numeric> // For std::accumulate
+#include <cmath> // For std::sqrt and std::pow
 
 #include "core/Value.h"
 #include "core/Tape.h"
@@ -7,6 +9,9 @@
 #include "nn/layers/Linear.h"
 #include "nn/models/MLP.h"
 #include "nn/optimizers/SGD.h"
+
+#include "math/random/Normal.h"
+
 
 void test_values() {
     std::cout << "--- Value Test ---" << std::endl;
@@ -151,11 +156,36 @@ void test_SGD() {
     }
 }
 
+void test_NormalSample() {
+    std::cout << "--- Normal Sample Test ---" << std::endl;
+
+    Normal normalSampler;
+    std::vector<float> samples =  normalSampler.sample(0.0f, 1.0f, 500000);
+
+    // 1. Calculate Mean
+    float sum = std::accumulate(samples.begin(), samples.end(), 0.0f);
+    float mean = sum / samples.size();
+
+    // 2. Calculate Standard Deviation
+    float varianceSum = 0;
+    for (float x : samples) {
+        varianceSum += std::pow(x - mean, 2);
+    }
+
+    float variance = varianceSum / samples.size();
+    float stdDev = std::sqrt(variance);
+
+    // Output results
+    std::cout << "Mean: " << mean << std::endl;
+    std::cout << "Standard Deviation: " << stdDev << std::endl;
+}
+
 int main() {
     test_values();
     test_linear();
     test_MLP();
     test_SGD();
+    test_NormalSample();
 
     return 0;
 }

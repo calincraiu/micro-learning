@@ -3,7 +3,8 @@ add_executable(runtime
 )
 
 # Link the app to libraries
-target_link_libraries(runtime PRIVATE 
-    core 
+target_link_libraries(runtime PRIVATE
+    core
     nn
+    math
 )

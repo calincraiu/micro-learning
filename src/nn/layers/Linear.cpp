@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <sstream>
+#include <random>
 
 #include "nn/layers/Linear.h"
 
@@ -11,9 +12,13 @@ Linear::Linear(Tape* tape, size_t features_in, size_t features_out, bool use_bia
 		m_biases.reserve(features_out);
 	}
 
+	std::random_device rd;
+	std::mt19937 engine(rd());
+	std::uniform_real_distribution<float> uniform(-1.0, 1.0);
+
 	for (size_t o = 0; o < features_out; o++)  {
 		for (size_t i = 0; i < features_in; i++) {
-			float val = (float(rand() % 1000) / 500.0f) - 1.0f; // -1 to 1
+			float val = uniform(engine); // Random number from uniform distribution
 			m_weights.emplace_back(m_tape->create_leaf(val), m_tape);
 		}
 

@@ -44,3 +44,19 @@ add_library(nn
 target_include_directories(nn PUBLIC 
     ${CMAKE_SOURCE_DIR}/include
 )
+
+# math
+set(MATH_HEADERS
+    "${CMAKE_SOURCE_DIR}/include/math/Constants.h"
+    "${CMAKE_SOURCE_DIR}/include/math/random/Normal.h"
+)
+set(MATH_SOURCES
+    math/random/Normal.cpp
+)
+add_library(math
+    ${MATH_SOURCES} 
+    ${MATH_HEADERS}
+)
+target_include_directories(math PUBLIC 
+    ${CMAKE_SOURCE_DIR}/include
+)
