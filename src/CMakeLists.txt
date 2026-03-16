@@ -27,6 +27,8 @@ set(NN_HEADERS
 
     "${CMAKE_SOURCE_DIR}/include/nn/optimizers/Optimizer.h"
     "${CMAKE_SOURCE_DIR}/include/nn/optimizers/SGD.h"
+
+    "${CMAKE_SOURCE_DIR}/include/nn/losses/MSE.h"
 )
 set(NN_SOURCES
     nn/layers/Linear.cpp
@@ -36,6 +38,8 @@ set(NN_SOURCES
     nn/models/MLP.cpp
 
     nn/optimizers/SGD.cpp
+
+    nn/losses/MSE.cpp
 )
 add_library(nn
     ${NN_SOURCES} 

@@ -9,6 +9,7 @@
 #include "nn/layers/Linear.h"
 #include "nn/models/MLP.h"
 #include "nn/optimizers/SGD.h"
+#include "nn/losses/MSE.h"
 
 #include "math/random/Normal.h"
 #include "math/Statistics.h"
@@ -131,6 +132,9 @@ void test_SGD() {
     // Target
     Value target(tape.create_leaf(3.5f), &tape);
 
+    // Loss
+    MSE loss = MSE(&tape);
+
     // Loop
     for (size_t i = 0; i < 30; i++) {
         std::cout << "\n=== Iteration " << i << " ===" << std::endl;
@@ -138,16 +142,15 @@ void test_SGD() {
         // Forward
         std::vector<Value> output = model(input);
 
-        // Loss (L2)
-        Value diff = output[0] - target;
-        Value loss = diff * diff;
+        // Loss (MSE)
+        Value lossValue = loss(output[0], target);
 
         std::cout << "Output: " << output[0].get_data() << std::endl;
-        std::cout << "Loss: " << loss.get_data() << std::endl;
+        std::cout << "Loss: " << lossValue.get_data() << std::endl;
 
         // Backprop
         tape.zero_grad();
-        tape.backward(loss.get_node());
+        tape.backward(lossValue.get_node());
 
         // Update
         optimizer.step();
