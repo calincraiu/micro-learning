@@ -48,9 +48,12 @@ target_include_directories(nn PUBLIC
 # math
 set(MATH_HEADERS
     "${CMAKE_SOURCE_DIR}/include/math/Constants.h"
+    "${CMAKE_SOURCE_DIR}/include/math/Statistics.h"
     "${CMAKE_SOURCE_DIR}/include/math/random/Normal.h"
+    
 )
 set(MATH_SOURCES
+    math/Statistics.cpp
     math/random/Normal.cpp
 )
 add_library(math

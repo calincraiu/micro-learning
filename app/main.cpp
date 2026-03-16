@@ -11,6 +11,7 @@
 #include "nn/optimizers/SGD.h"
 
 #include "math/random/Normal.h"
+#include "math/Statistics.h"
 
 
 void test_values() {
@@ -162,18 +163,8 @@ void test_NormalSample() {
     Normal normalSampler;
     std::vector<float> samples =  normalSampler.sample(0.0f, 1.0f, 500000);
 
-    // 1. Calculate Mean
-    float sum = std::accumulate(samples.begin(), samples.end(), 0.0f);
-    float mean = sum / samples.size();
-
-    // 2. Calculate Standard Deviation
-    float varianceSum = 0;
-    for (float x : samples) {
-        varianceSum += std::pow(x - mean, 2);
-    }
-
-    float variance = varianceSum / samples.size();
-    float stdDev = std::sqrt(variance);
+    float mean = math::Statistics::mean(samples);
+    float stdDev = math::Statistics::std(samples);
 
     // Output results
     std::cout << "Mean: " << mean << std::endl;
@@ -189,4 +180,3 @@ int main() {
 
     return 0;
 }
-
