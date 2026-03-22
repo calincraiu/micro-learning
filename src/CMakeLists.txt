@@ -54,7 +54,6 @@ set(MATH_HEADERS
     "${CMAKE_SOURCE_DIR}/include/math/Constants.h"
     "${CMAKE_SOURCE_DIR}/include/math/Statistics.h"
     "${CMAKE_SOURCE_DIR}/include/math/random/Normal.h"
-    
 )
 set(MATH_SOURCES
     math/Statistics.cpp
@@ -65,5 +64,24 @@ add_library(math
     ${MATH_HEADERS}
 )
 target_include_directories(math PUBLIC 
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+# util
+set(UTIL_HEADERS
+    "${CMAKE_SOURCE_DIR}/include/util/data/Dataset.h"
+    "${CMAKE_SOURCE_DIR}/include/util/data/Dataloader.h"
+    "${CMAKE_SOURCE_DIR}/include/util/data/CSV.h"
+)
+set(UTIL_SOURCES
+    util/data/Dataset.cpp
+    util/data/Dataloader.cpp
+    util/data/CSV.cpp
+)
+add_library(util
+    ${UTIL_SOURCES} 
+    ${UTIL_HEADERS}
+)
+target_include_directories(util PUBLIC 
     ${CMAKE_SOURCE_DIR}/include
 )

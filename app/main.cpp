@@ -1,6 +1,8 @@
 #include <iostream>
-#include <numeric> // For std::accumulate
-#include <cmath> // For std::sqrt and std::pow
+#include <numeric>
+#include <cmath>
+#include <fstream>
+#include <filesystem>
 
 #include "core/Value.h"
 #include "core/Tape.h"
@@ -13,6 +15,9 @@
 
 #include "math/random/Normal.h"
 #include "math/Statistics.h"
+
+#include "util/data/Dataset.h"
+#include "util/data/Dataloader.h"
 
 
 void test_values() {
@@ -174,12 +179,69 @@ void test_NormalSample() {
     std::cout << "Standard Deviation: " << stdDev << std::endl;
 }
 
+void test_Dataset() {
+    std::cout << "--- Dataset Test ---" << std::endl;
+
+    std::vector<std::vector<float>> X = { {1.0f, 2.0f}, {3.0f, 4.0f}, {5.0f, 6.0f} };
+    std::vector<float> y = { 3.5f, 10.0f, 18.0f };
+    Dataset dataset(X, y);
+    std::cout << "Dataset size: " << dataset.size() << std::endl;
+}
+
+void test_DatasetFromCSV() {
+    std::cout << "--- Dataset from CSV Test ---" << std::endl;
+
+    try {
+        std::filesystem::path dataPath = std::string(PROJECT_ROOT);
+        dataPath /= "data";
+        dataPath /= "california_housing.csv";
+
+        std::cout << "Loading from: " << dataPath << std::endl;
+        Dataset ds = Dataset::from_csv(dataPath.string(), true, ',');
+
+        std::cout << "Dataset size: " << ds.size() << std::endl;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error loading dataset: " << e.what() << std::endl;
+    }
+}
+
+void test_Dataloader() {
+    std::cout << "--- Dataloader Test ---" << std::endl;
+
+    try {
+        Tape tape;
+        std::filesystem::path dataPath = std::string(PROJECT_ROOT);
+        dataPath /= "data";
+        dataPath /= "california_housing.csv";
+        Dataset ds = Dataset::from_csv(dataPath.string(), true, ',');
+        Dataloader dl = Dataloader(ds, &tape, true);
+
+        std::vector<Sample> samples = dl.get_epoch_samples();
+        size_t num_samples = 5;
+        for (size_t i = 0; i < num_samples; i++) {
+            Sample s = samples.at(i);
+            std::cout << "Sample " << i + 1 << ": X( ";
+            for (auto feature : s.X) {
+                std::cout << feature.get_data() << " ";
+            }
+            std::cout << "); y( " << s.y.get_data() << " )" << std::endl;
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error loading dataset: " << e.what() << std::endl;
+    }
+}
+
 int main() {
     test_values();
     test_linear();
     test_MLP();
     test_SGD();
     test_NormalSample();
+    test_Dataset();
+    test_DatasetFromCSV();
+    test_Dataloader();
 
     return 0;
 }
